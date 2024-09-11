@@ -38,6 +38,7 @@ $ npm install
 # The docker desktop must be installed
 # development
 $ docker-compose up --build
+#server will start on the port 5001
 
 # production mode
 $ npm run start:prod

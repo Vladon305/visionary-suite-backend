@@ -35,11 +35,10 @@ $ npm install
 ## Compile and run the project
 
 ```bash
+# The docker desktop must be installed
 # development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
+$ docker-compose up --build
+#server will start on the port 5001
 
 # production mode
 $ npm run start:prod

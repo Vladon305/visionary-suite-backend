@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  name     String?
+  password String
+
+  folders Folder[]
+  files   File[]
+
+  Permission Permission[]
+
+  Penguin Penguin[]
+}
+
+model Folder {
+  id          String       @id @default(cuid())
+  name        String
+  parentId    String?
+  parent      Folder?      @relation("FolderToFolder", fields: [parentId], references: [id])
+  subfolders  Folder[]     @relation("FolderToFolder")
+  ownerId     String
+  owner       User         @relation(fields: [ownerId], references: [id])
+  files       File[]
+  permissions Permission[]
+}
+
+model Penguin {
+  id                Int          @id @default(autoincrement())
+  state             PenguinState @default(HAPPY)
+  hungerLevel       Int          @default(0)
+  userId            String       @unique
+  lastTaskCompleted DateTime     @default(now())
+  lastInteracted    DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model File {
+  id          String       @id @default(cuid())
+  name        String
+  path        String
+  folderId    String?
+  folder      Folder?      @relation(fields: [folderId], references: [id])
+  ownerId     String
+  owner       User         @relation(fields: [ownerId], references: [id])
+  permissions Permission[]
+}
+
+model Permission {
+  id       String  @id @default(cuid())
+  userId   String
+  folderId String?
+  fileId   String?
+  user     User    @relation(fields: [userId], references: [id])
+  folder   Folder? @relation(fields: [folderId], references: [id])
+  file     File?   @relation(fields: [fileId], references: [id])
+
+  accessType AccessType
+}
+
+enum AccessType {
+  READ
+  WRITE
+  DELETE
+}
+
+enum PenguinState {
+  HAPPY
+  ANGRY
+  FRUFOWED
+  SAD
+  VERY_SAD
+  MONSTER
+}

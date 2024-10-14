@@ -1,0 +1,26 @@
+# Базовый образ с Node.js
+FROM node:18-alpine
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm install
+
+# Копируем все файлы проекта
+COPY . .
+
+# Генерируем Prisma клиент
+RUN npx prisma generate
+
+# Устанавливаем переменные окружения
+ENV PORT=3000
+
+# Пробрасываем порт
+EXPOSE 3000
+
+# Запуск приложения
+CMD ["npm", "run", "start:dev"]

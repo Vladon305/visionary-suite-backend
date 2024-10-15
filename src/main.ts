@@ -20,7 +20,7 @@ async function bootstrap() {
     exposedHeaders: 'set-cookie',
   });
 
-  const port = Number(process.env.PORT) | 4000;
+  const port = Number(process.env.PORT) || 4000;
 
   await app.listen(port, () => console.log(`started on port ${port}`));
 }

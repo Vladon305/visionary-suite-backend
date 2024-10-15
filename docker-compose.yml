@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: DockerFile
     ports:
-      - "4000:4024"
+      - "4000:${PORT}"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}

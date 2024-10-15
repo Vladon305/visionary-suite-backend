@@ -22,9 +22,11 @@ model User {
   folders Folder[]
   files   File[]
 
-  Permission Permission[]
+  Permissions Permission[]
 
-  Penguin Penguin[]
+  Penguins Penguin[]
+
+  Tasks Task[]
 }
 
 model Folder {
@@ -61,6 +63,14 @@ model File {
   permissions Permission[]
 }
 
+model Task {
+  id      String     @id @default(cuid())
+  name    String
+  status  TaskStatus @default(BACKLOG)
+  ownerId String
+  owner   User       @relation(fields: [ownerId], references: [id])
+}
+
 model Permission {
   id       String  @id @default(cuid())
   userId   String
@@ -86,4 +96,10 @@ enum PenguinState {
   SAD
   VERY_SAD
   MONSTER
+}
+
+enum TaskStatus {
+  COMPLETED
+  IN_PROGRESS
+  BACKLOG
 }
